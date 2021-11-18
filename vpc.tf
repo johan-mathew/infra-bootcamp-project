@@ -59,3 +59,47 @@ resource "aws_route_table_association" "team_3_rta_public_2" {
   subnet_id      = aws_subnet.team_3_subnet_public_2.id
   route_table_id = aws_route_table.team_3_rt.id
 }
+
+resource "aws_network_acl" "team_3_nacl" {
+  vpc_id = aws_vpc.team_3_vpc.id
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 200
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 80
+    to_port    = 80
+  }
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "49.37.191.15/32"
+    from_port  = 80
+    to_port    = 80
+  }
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 99
+    action     = "allow"
+    cidr_block = "103.170.54.87/32"
+    from_port  = 80
+    to_port    = 80
+  }
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 98
+    action     = "allow"
+    cidr_block = "49.37.33.223/32"
+    from_port  = 80
+    to_port    = 80
+  }
+
+  tags = {
+    Name = "${var.TAG_PREFIX}_${terraform.workspace}_nacl"
+  }
+}
